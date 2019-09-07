@@ -543,7 +543,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
-    1: COM_DEBUG
+    1: LOG_DEBUG;LOG_WARNING
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

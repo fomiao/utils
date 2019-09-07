@@ -24,8 +24,6 @@ public class TestLogFile : MonoBehaviour
     {
         var folder = Directory.GetCurrentDirectory()+ "/Logs";         
         G.Logger.Init(replaceLogHander, true, recordTime, folder);
-
-
         InvokeRepeating("Test", 0, 0.5f);
     }
 

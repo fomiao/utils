@@ -220,10 +220,10 @@ MonoBehaviour:
   replaceLogHander: 0
   logBattle: 0
   logSkill: 1
-  logNormal: 1
+  logNormal: 0
   showLog: 1
-  showWarning: 1
-  showError: 1
+  showWarning: 0
+  showError: 0
 --- !u!1 &2060647734
 GameObject:
   m_ObjectHideFlags: 0
