@@ -31,7 +31,7 @@ namespace G
             else
                 instance = go.AddComponent<LogHandleFileSync>();
 
-            instance.Init(folder);
+            instance.InitImpl(folder);
             instance.recordTime = recordTime;
             Application.logMessageReceived += instance.LogCallback;
             //是否替换LogHandler
@@ -39,9 +39,10 @@ namespace G
                 LogHandler.Init();
         }
 
-
         public static string LogText(LogType logType,string title,string format, params object[] args)
         {
+            if (instance == null)
+                return "LogFile==null";
             string stackTrace = null;
             if (instance.m_logStackTrace[(int)logType])
                 stackTrace = new System.Diagnostics.StackTrace(true).ToString();
@@ -52,13 +53,22 @@ namespace G
             return text;
         }
 
+        static string GetLogText(string title, string condition, string stackTrace, LogType logType)
+        {
+            int index = (int)logType;
+            if (index > 4)
+                return "logType Error" + logType.ToString();
+
+            string timeText = instance.recordTime ? DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") : "";
+            return string.Format("{0} {1} {2} \r\n", title ?? "", timeText, condition, stackTrace);
+        }
 
         protected virtual void OnDestroy()
         {
             Application.logMessageReceived -= instance.LogCallback;
         }
 
-        public void Init(string folder)
+        void InitImpl(string folder)
         {
             for (int i = 0; i < FLG_CNT; i++)
                 m_logStackTrace[i] = Application.GetStackTraceLogType((LogType)i) != StackTraceLogType.None;
@@ -91,15 +101,7 @@ namespace G
             LogImpl(GetLogText(null,condition, stackTrace, logType));
         }
         protected abstract void LogImpl(string text);
-        static string GetLogText(string title, string condition, string stackTrace, LogType logType)
-        {
-            int index = (int)logType;
-            if (index > 4)
-                return "logType Error" + logType.ToString();
 
-            string timeText = instance.recordTime ? DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff"):"";
-            return string.Format("{0} {1} {2} \r\n", title??"",  timeText, condition, stackTrace);
-        }
     }
 
     class LogHandleFileSync : ILogFile
